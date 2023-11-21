@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  BudgetsView.swift
 //  Budgeting-App
 //
 //  Created by Aleksandr Morozov on 21/11/23.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct BudgetsView: View {
     var body: some View {
-        MainView()
+        Text("There are no budgets yet.")
     }
 }
 
 #Preview {
-    ContentView()
+    BudgetsView()
 }

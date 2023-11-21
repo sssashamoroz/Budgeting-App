@@ -11,6 +11,13 @@
 		D7564FDA2B0CF24F00026CBC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7564FD92B0CF24F00026CBC /* ContentView.swift */; };
 		D7564FDC2B0CF25000026CBC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7564FDB2B0CF25000026CBC /* Assets.xcassets */; };
 		D7564FDF2B0CF25000026CBC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7564FDE2B0CF25000026CBC /* Preview Assets.xcassets */; };
+		D7564FE72B0CF42E00026CBC /* EntriesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7564FE62B0CF42E00026CBC /* EntriesListView.swift */; };
+		D7564FE92B0CF43C00026CBC /* AddEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7564FE82B0CF43C00026CBC /* AddEntryView.swift */; };
+		D7564FEB2B0CF4EF00026CBC /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7564FEA2B0CF4EF00026CBC /* MainView.swift */; };
+		D7564FED2B0CF6E100026CBC /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7564FEC2B0CF6E100026CBC /* InsightsView.swift */; };
+		D7564FEF2B0CF6F800026CBC /* BudgetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7564FEE2B0CF6F700026CBC /* BudgetsView.swift */; };
+		D7564FF12B0CF71500026CBC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7564FF02B0CF71500026CBC /* SettingsView.swift */; };
+		D7564FF32B0D08C600026CBC /* EntryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7564FF22B0D08C600026CBC /* EntryModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +26,14 @@
 		D7564FD92B0CF24F00026CBC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D7564FDB2B0CF25000026CBC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D7564FDE2B0CF25000026CBC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D7564FE52B0CF3AD00026CBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D7564FE62B0CF42E00026CBC /* EntriesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntriesListView.swift; sourceTree = "<group>"; };
+		D7564FE82B0CF43C00026CBC /* AddEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEntryView.swift; sourceTree = "<group>"; };
+		D7564FEA2B0CF4EF00026CBC /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		D7564FEC2B0CF6E100026CBC /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
+		D7564FEE2B0CF6F700026CBC /* BudgetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetsView.swift; sourceTree = "<group>"; };
+		D7564FF02B0CF71500026CBC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		D7564FF22B0D08C600026CBC /* EntryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +66,16 @@
 		D7564FD62B0CF24F00026CBC /* Budgeting-App */ = {
 			isa = PBXGroup;
 			children = (
+				D7564FE52B0CF3AD00026CBC /* Info.plist */,
 				D7564FD72B0CF24F00026CBC /* Budgeting_AppApp.swift */,
 				D7564FD92B0CF24F00026CBC /* ContentView.swift */,
+				D7564FEA2B0CF4EF00026CBC /* MainView.swift */,
+				D7564FE62B0CF42E00026CBC /* EntriesListView.swift */,
+				D7564FF02B0CF71500026CBC /* SettingsView.swift */,
+				D7564FEC2B0CF6E100026CBC /* InsightsView.swift */,
+				D7564FEE2B0CF6F700026CBC /* BudgetsView.swift */,
+				D7564FE82B0CF43C00026CBC /* AddEntryView.swift */,
+				D7564FF42B0D092000026CBC /* Models */,
 				D7564FDB2B0CF25000026CBC /* Assets.xcassets */,
 				D7564FDD2B0CF25000026CBC /* Preview Content */,
 			);
@@ -65,6 +88,14 @@
 				D7564FDE2B0CF25000026CBC /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D7564FF42B0D092000026CBC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D7564FF22B0D08C600026CBC /* EntryModel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +168,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7564FF32B0D08C600026CBC /* EntryModel.swift in Sources */,
+				D7564FEF2B0CF6F800026CBC /* BudgetsView.swift in Sources */,
+				D7564FF12B0CF71500026CBC /* SettingsView.swift in Sources */,
 				D7564FDA2B0CF24F00026CBC /* ContentView.swift in Sources */,
+				D7564FE72B0CF42E00026CBC /* EntriesListView.swift in Sources */,
 				D7564FD82B0CF24F00026CBC /* Budgeting_AppApp.swift in Sources */,
+				D7564FED2B0CF6E100026CBC /* InsightsView.swift in Sources */,
+				D7564FEB2B0CF4EF00026CBC /* MainView.swift in Sources */,
+				D7564FE92B0CF43C00026CBC /* AddEntryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,11 +313,13 @@
 				DEVELOPMENT_TEAM = U9JXWD2ZKD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Budgeting-App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -304,11 +344,13 @@
 				DEVELOPMENT_TEAM = U9JXWD2ZKD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Budgeting-App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

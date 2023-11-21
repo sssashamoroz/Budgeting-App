@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  SettingsView.swift
 //  Budgeting-App
 //
 //  Created by Aleksandr Morozov on 21/11/23.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct SettingsView: View {
     var body: some View {
-        MainView()
+        Text("Out of scope of the challenge.")
     }
 }
 
 #Preview {
-    ContentView()
+    SettingsView()
 }
