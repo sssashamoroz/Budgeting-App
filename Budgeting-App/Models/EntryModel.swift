@@ -10,14 +10,16 @@ import SwiftData
 
 @Model
 class Entry {
-    var amount : Int
+    var amount : Float
     var date : Date
     var category : String
+    var type = ""
     
-    init(amount: Int, date: Date = .now, category: String) {
+    init(amount: Float, date: Date = .now, category: String, type : String) {
         self.amount = amount
         self.date = date
         self.category = category
+        self.type = type
     }
     
 }

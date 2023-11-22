@@ -9,8 +9,10 @@ import SwiftUI
 
 struct AddEntryView: View {
     
+    @Environment(\.modelContext) var modelContext
+    
     @State private var amount: String = ""
-    @State private var entryTypeSegmentation = 0
+    @State private var entryTypeSegmentation = "Expense"
     @State private var selectedCategory: String = "Category"
     
     //Buttons Control
@@ -56,10 +58,10 @@ struct AddEntryView: View {
                 Picker("Type of Entry", selection: $entryTypeSegmentation){
                     Text("Expense")
                         .bold()
-                        .tag(0)
+                        .tag("Expense")
                     Text("Income")
                         .bold()
-                        .tag(1)
+                        .tag("Income")
                 }
                 .frame(width: 200)
                 .pickerStyle(.segmented)
@@ -140,6 +142,7 @@ struct AddEntryView: View {
                     HStack{
                         Text("\(selectedCategory)")
                             .bold()
+                            .foregroundColor(categoryColor)
                     }
                     .frame(maxWidth: .infinity, maxHeight: 43)
                     .background(
@@ -249,7 +252,9 @@ struct AddEntryView: View {
                         
                         //Send Entry Button
                         Button(action: {
-                            print("Button pressed!")
+                            print("💚 Entry inserted to the Database.")
+                            addEntry(amount: Float(amount)!, category: selectedCategory, type : entryTypeSegmentation
+                            )
                         }) {
                             Image(systemName: "checkmark.square.fill")
                                 .font(.title) // Adjust the size of the system image
@@ -275,8 +280,13 @@ struct AddEntryView: View {
             .opacity(showPicker ? 0.4 : 1)
             .animation(.default, value: showPicker)
         }
-       
+    }
+    
+    //Add Entry Function
+    func addEntry(amount : Float, category : String, type : String){
+        let entry = Entry(amount: amount, category: String(category.dropFirst(2)), type : type)
         
+        modelContext.insert(entry)
     }
 }
 
@@ -328,7 +338,7 @@ struct CategoryPickerView: View {
                 )
                 
                 Button("📝 Other") {
-                    selectCategory("🚌 Transport")
+                    selectCategory("📝 Other")
                 }
                 .padding(.vertical, 6)
                 .padding(.horizontal, 10)
