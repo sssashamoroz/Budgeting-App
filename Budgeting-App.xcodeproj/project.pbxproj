@@ -18,6 +18,7 @@
 		D7564FEF2B0CF6F800026CBC /* BudgetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7564FEE2B0CF6F700026CBC /* BudgetsView.swift */; };
 		D7564FF12B0CF71500026CBC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7564FF02B0CF71500026CBC /* SettingsView.swift */; };
 		D7564FF32B0D08C600026CBC /* EntryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7564FF22B0D08C600026CBC /* EntryModel.swift */; };
+		D7A017412B0ED28E00D32E4D /* EntriesSumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A017402B0ED28E00D32E4D /* EntriesSumView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		D7564FEE2B0CF6F700026CBC /* BudgetsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetsView.swift; sourceTree = "<group>"; };
 		D7564FF02B0CF71500026CBC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D7564FF22B0D08C600026CBC /* EntryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryModel.swift; sourceTree = "<group>"; };
+		D7A017402B0ED28E00D32E4D /* EntriesSumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntriesSumView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 				D7564FD92B0CF24F00026CBC /* ContentView.swift */,
 				D7564FEA2B0CF4EF00026CBC /* MainView.swift */,
 				D7564FE62B0CF42E00026CBC /* EntriesListView.swift */,
+				D7A017402B0ED28E00D32E4D /* EntriesSumView.swift */,
 				D7564FF02B0CF71500026CBC /* SettingsView.swift */,
 				D7564FEC2B0CF6E100026CBC /* InsightsView.swift */,
 				D7564FEE2B0CF6F700026CBC /* BudgetsView.swift */,
@@ -177,6 +180,7 @@
 				D7564FED2B0CF6E100026CBC /* InsightsView.swift in Sources */,
 				D7564FEB2B0CF4EF00026CBC /* MainView.swift in Sources */,
 				D7564FE92B0CF43C00026CBC /* AddEntryView.swift in Sources */,
+				D7A017412B0ED28E00D32E4D /* EntriesSumView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

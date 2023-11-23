@@ -11,36 +11,39 @@ import SwiftData
 struct EntriesListView: View {
     
     @Environment(\.modelContext) var modelContext
-    @State private var sortOrder = 0
     
     //Implement Dynamic Sort Descriptor
     @Query var entries : [Entry]
     
+    
+    // Computed property to group entries by day
     private var groupedByDayEntries: [Date: [Entry]] {
         groupEntriesByDay(entries: entries)
     }
-
+    
+    @State private var sortOrder = 0
+    
+    @State private var sortingChoice = SortDescriptor(\Entry.date)
+    
     //Dynamic menu text
     private var menuTitle: String {
-            switch sortOrder {
-                case 1: return "today"
-                case 2: return "this week"
-                case 3: return "this month"
-                case 4: return "this year"
-                default: return "this month"
-            }
-        
+        switch sortOrder {
+            case 1: return "today"
+            case 2: return "this week"
+            case 3: return "this month"
+            case 4: return "this year"
+            default: return "this month"
         }
+        
+    }
+    
     
     var body: some View {
         VStack{
-            
             Spacer()
+                .frame(height: 50)
             
-            
-            //Main Money Display
             VStack(spacing: 2){
-                
                 HStack{
                     Text("Net total")
                         .bold()
@@ -70,122 +73,124 @@ struct EntriesListView: View {
                     )
                 }
                 
-                HStack{
-                    Text("$")
-                        .font(.system(size: 40))
-                        .foregroundColor(.gray)
-                        .bold()
-                    
-                    Text("0.00")
-                        .font(.system(size: 60))
-                        .bold()
-                }
+                //Pushing down the Entries Sum view for filter selection
+                EntriesSumView(sort: SortDescriptor(\Entry.date), range : menuTitle)
+                
             }
-            
             
             List {
-                ForEach(entries) { entry in
+                ForEach(groupedByDayEntries.keys.sorted().reversed(), id: \.self) { key in
                     
-                    VStack(alignment: .leading){
-                        HStack{
-                            
-                            ZStack{
-                                
-                                let rectangleColor = categoryColor(entry: entry)
-                                
-                                RoundedRectangle(cornerRadius: 10)
-                                    .frame(width: 40, height: 40)
-                                    .foregroundColor(rectangleColor)
-                                
-                                Text(categoryEmoji(entry: entry))
-                            }
-                                
+                    let values = groupedByDayEntries[key] ?? []
+                    
+                    Section(header : Text(key.formatted(date: .abbreviated, time: .omitted))) {
+                        
+                        ForEach(values.reversed()) { entry in
                             VStack(alignment: .leading){
-                                Text(entry.category)
-                                    .bold()
-                                Text(entry.date.formatted(.dateTime.hour().minute()))
-                                    .font(.footnote)
-                                    .foregroundStyle(Color.gray)
+                                HStack{
+                                    
+                                    ZStack{
+                                        
+                                        let rectangleColor = categoryColor(entry: entry)
+                                        
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .frame(width: 40, height: 40)
+                                            .foregroundColor(rectangleColor)
+                                        
+                                        Text(categoryEmoji(entry: entry))
+                                    }
+                                    
+                                    VStack(alignment: .leading){
+                                        Text(entry.category)
+                                            .bold()
+                                        Text(entry.date.formatted(.dateTime.hour().minute()))
+                                            .font(.footnote)
+                                            .foregroundStyle(Color.gray)
+                                    }
+                                    
+                                    
+                                    Spacer()
+                                    
+                                    Text(String(entry.amount) + "$")
+                                        .font(.system(size: 20))
+                                    
+                                }
                             }
-                            
-                            
-                            Spacer()
-                            
-                            Text(String(entry.amount) + "$")
-                                .font(.system(size: 20))
-
-                        }
+                        }.onDelete(perform: deleteEntry)
                     }
-                }.onDelete(perform: deleteEntry)
-            }
+                }//.onDelete(perform: deleteEntry)
             
-        }
-    }
-    
-    //Delete Entry Function
-    func deleteEntry(_ indexSet: IndexSet){
-        for index in indexSet {
-            let entry = entries[index]
-            modelContext.delete(entry)
-        }
-    }
-    
-    func groupEntriesByDay(entries: [Entry]) -> [Date: [Entry]] {
-        var groupedByDayEntries = [Date: [Entry]]()
+        }.scrollIndicators(.hidden)
 
-        let calendar = Calendar.current
-
-        for entry in entries {
-            // Extract the start of the day from the entry date
-            let dateStartOfDay = calendar.startOfDay(for: entry.date)
-            
-            // Append the entry to the array for this day, or create a new array if it doesn't exist
-            if var entriesForDay = groupedByDayEntries[dateStartOfDay] {
-                entriesForDay.append(entry)
-                groupedByDayEntries[dateStartOfDay] = entriesForDay
-            } else {
-                groupedByDayEntries[dateStartOfDay] = [entry]
-            }
-        }
-
-        return groupedByDayEntries
-    }
-
-    
-    //Function that checks the category color.
-    func categoryColor(entry: Entry) -> Color {
-        let modifiedCategory = String(entry.category)
-
-        if modifiedCategory == "Transport" {
-            return Color.orange
-        } else if modifiedCategory == "Groceries" { // Example for another category
-            return Color.green
-        } else if modifiedCategory == "Rent" { // Another example
-            return Color.blue
-        } else if modifiedCategory == "Other" {
-            return Color.purple
-        } else {
-            return Color.gray
-        }
-    }
-    
-    //Function that checks the category emoji.
-    func categoryEmoji(entry: Entry) -> String {
-        let modifiedCategory = String(entry.category)
-
-        if modifiedCategory == "Transport" {
-            return "🚌"
-        } else if modifiedCategory == "Groceries" {
-            return "🛒"
-        } else if modifiedCategory == "Rent" {
-            return "🏠"
-        } else if modifiedCategory == "Other" {
-            return "📝"
-        } else {
-            return "✏️"
-        }
     }
 }
+
+//Delete Entry Function
+func deleteEntry(_ indexSet: IndexSet){
+    for index in indexSet {
+        let entry = entries[index]
+        modelContext.delete(entry)
+    }
+}
+
+
+//Create a dictionary for the Entries List
+func groupEntriesByDay(entries: [Entry]) -> [Date: [Entry]] {
+    var groupedByDayEntries = [Date: [Entry]]()
+    
+    let calendar = Calendar.current
+    
+    for entry in entries {
+        // Extract the start of the day from the entry date
+        let dateStartOfDay = calendar.startOfDay(for: entry.date)
+        
+        // Append the entry to the array for this day, or create a new array if it doesn't exist
+        if var entriesForDay = groupedByDayEntries[dateStartOfDay] {
+            entriesForDay.append(entry)
+            groupedByDayEntries[dateStartOfDay] = entriesForDay
+        } else {
+            groupedByDayEntries[dateStartOfDay] = [entry]
+        }
+    }
+    
+    return groupedByDayEntries
+}
+
+//Function that checks the category color.
+func categoryColor(entry: Entry) -> Color {
+    let modifiedCategory = String(entry.category)
+    
+    if modifiedCategory == "Transport" {
+        return Color.orange
+    } else if modifiedCategory == "Groceries" { // Example for another category
+        return Color.blue
+    } else if modifiedCategory == "Rent" { // Another example
+        return Color.green
+    } else if modifiedCategory == "Other" {
+        return Color.purple
+    } else {
+        return Color.gray
+    }
+}
+
+//Function that checks the category emoji.
+func categoryEmoji(entry: Entry) -> String {
+    let modifiedCategory = String(entry.category)
+    
+    if modifiedCategory == "Transport" {
+        return "🚌"
+    } else if modifiedCategory == "Groceries" {
+        return "🛒"
+    } else if modifiedCategory == "Rent" {
+        return "🏠"
+    } else if modifiedCategory == "Other" {
+        return "📝"
+    } else {
+        return "✏️"
+    }
+    }
+}
+
 
 #Preview {
     EntriesListView()

@@ -38,6 +38,13 @@ struct AddEntryView: View {
             return Color.orange
         case "📝 Other":
             return Color.purple
+        case "🤑 Allowance":
+            return Color.green
+        case "✳️ Freelance":
+            return Color.green
+        case "💰 Paycheck":
+            return Color.green
+            
         default:
             return Color.pink.opacity(0.2) // Default color
         }
@@ -47,8 +54,8 @@ struct AddEntryView: View {
     var body: some View {
         ZStack{
             if showPicker {
-                CategoryPickerView(selectedCategory: $selectedCategory, showPicker: $showPicker)
-                    .position(x: categoryButtonFrame.midX+46, y: categoryButtonFrame.maxY - 190)
+                CategoryPickerView(selectedCategory: $selectedCategory, showPicker: $showPicker, entryTypeSegmentation: $entryTypeSegmentation)
+                    .position(x: categoryButtonFrame.midX+40, y: categoryButtonFrame.maxY - 190)
 
             }
             
@@ -90,7 +97,6 @@ struct AddEntryView: View {
                     
                     Text(amount.isEmpty ? "0" : amount.prefix(7))
                         .font(.system(size: 60))
-                        .bold()
                     
                     Spacer()
                     
@@ -252,9 +258,26 @@ struct AddEntryView: View {
                         
                         //Send Entry Button
                         Button(action: {
-                            print("💚 Entry inserted to the Database.")
-                            addEntry(amount: Float(amount)!, category: selectedCategory, type : entryTypeSegmentation
-                            )
+                            
+                            if let amountValue = Float(amount), amountValue > 0 {
+                                let adjustedAmount: Float
+                                if entryTypeSegmentation == "Expense" {
+                                    adjustedAmount = -amountValue
+                                } else {
+                                    adjustedAmount = amountValue
+                                }
+                                
+                                // Check if selectedCategory is not default value
+                                if selectedCategory != "Category" {
+                                    // Add entry as both conditions are satisfied
+                                    addEntry(amount: adjustedAmount, date: date, category: selectedCategory, type: entryTypeSegmentation)
+                                } else {
+                                    print("Insert correct values")
+                                }
+                            } else {
+                                print("Insert correct values")
+                            }
+                            
                         }) {
                             Image(systemName: "checkmark.square.fill")
                                 .font(.title) // Adjust the size of the system image
@@ -283,8 +306,8 @@ struct AddEntryView: View {
     }
     
     //Add Entry Function
-    func addEntry(amount : Float, category : String, type : String){
-        let entry = Entry(amount: amount, category: String(category.dropFirst(2)), type : type)
+    func addEntry(amount : Float, date : Date, category : String, type : String){
+        let entry = Entry(amount: amount, date : date, category: String(category.dropFirst(2)), type : type)
         
         modelContext.insert(entry)
     }
@@ -292,8 +315,11 @@ struct AddEntryView: View {
 
 //OverlayCategoryView
 struct CategoryPickerView: View {
+    
     @Binding var selectedCategory: String
     @Binding var showPicker: Bool
+    
+    @Binding var entryTypeSegmentation : String
 
     var body: some View {
         ZStack{
@@ -307,8 +333,8 @@ struct CategoryPickerView: View {
                 }
             
             VStack(alignment: .trailing) {
-                Button("🏠 Rent") {
-                    selectCategory("🏠 Rent")
+                Button(entryTypeSegmentation == "Income" ? "🤑 Allowance" : "🏠 Rent") {
+                    selectCategory(entryTypeSegmentation == "Income" ? "🤑 Allowance" : "🏠 Rent")
                 }
                 .padding(.vertical, 6)
                 .padding(.horizontal, 10)
@@ -317,8 +343,8 @@ struct CategoryPickerView: View {
                         .stroke(Color.gray.opacity(0.5), lineWidth: 1.5)
                 )
                 
-                Button("🛒 Groceries") {
-                    selectCategory("🛒 Groceries")
+                Button(entryTypeSegmentation == "Income" ? "✳️ Freelance" : "🛒 Groceries") {
+                    selectCategory(entryTypeSegmentation == "Income" ? "✳️ Freelance" : "🛒 Groceries")
                 }
                 .padding(.vertical, 6)
                 .padding(.horizontal, 10)
@@ -327,8 +353,8 @@ struct CategoryPickerView: View {
                         .stroke(Color.gray.opacity(0.5), lineWidth: 1.5)
                 )
                 
-                Button("🚌 Transport") {
-                    selectCategory("🚌 Transport")
+                Button(entryTypeSegmentation == "Income" ? "💰 Paycheck" : "🚌 Transport") {
+                    selectCategory(entryTypeSegmentation == "Income" ? "💰 Paycheck" : "🚌 Transport")
                 }
                 .padding(.vertical, 6)
                 .padding(.horizontal, 10)

@@ -15,7 +15,7 @@ class Entry {
     var category : String
     var type = ""
     
-    init(amount: Float, date: Date = .now, category: String, type : String) {
+    init(amount: Float, date : Date, category: String, type : String) {
         self.amount = amount
         self.date = date
         self.category = category
