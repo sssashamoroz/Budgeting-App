@@ -71,6 +71,7 @@ struct EntriesListView: View {
                         RoundedRectangle(cornerRadius: 20)
                             .stroke(.gray.opacity(0.7), lineWidth: 2)
                     )
+                    .accessibilityHint("You can select net total range dates if you press the button.")
                 }
                 
                 //Pushing down the Entries Sum view for filter selection
@@ -99,6 +100,7 @@ struct EntriesListView: View {
                                         
                                         Text(categoryEmoji(entry: entry))
                                     }
+                                    .accessibilityHidden(true)
                                     
                                     VStack(alignment: .leading){
                                         Text(entry.category)
@@ -118,9 +120,13 @@ struct EntriesListView: View {
                             }
                         }.onDelete(perform: deleteEntry)
                     }
-                }//.onDelete(perform: deleteEntry)
+                    
+                }
+                .listRowSeparator(.hidden)
             
-        }.scrollIndicators(.hidden)
+        }
+            .listStyle(.plain)
+            .scrollIndicators(.hidden)
 
     }
 }

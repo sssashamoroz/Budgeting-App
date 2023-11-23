@@ -31,10 +31,13 @@ struct EntriesSumView: View {
                 .font(.system(size: 40))
                 .foregroundColor(.gray)
                 .bold()
+                .accessibilityHidden(true)
             
             Text(String(format: "%.2f", calculatedSum).prefix(7))
                 .contentTransition(.numericText())
                 .font(.system(size: 60))
+                .accessibilityLabel(String(format: "%.2f", calculatedSum).prefix(7)+" dollars.")
+
         }
         
         

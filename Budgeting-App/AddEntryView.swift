@@ -93,27 +93,37 @@ struct AddEntryView: View {
                         .font(.system(size: 30))
                         .foregroundColor(.gray)
                         .bold()
+                        .accessibilityHidden(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
                         
                     
                     Text(amount.isEmpty ? "0" : amount.prefix(7))
                         .font(.system(size: 60))
+                        .accessibilityLabel("\(amount.prefix(7))"+" dollars.")
                     
                     Spacer()
                     
-                    Circle()
-                        .frame(width: 30)
-                        .foregroundColor(.gray)
-                        .opacity(0.3)
-                        .overlay(
-                            Image(systemName: "delete.left.fill")
-                                .opacity(0.5)
-                                .font(.body)
-                        )
-                        .onTapGesture {
-                            amount = String(amount.dropLast())
-                        }
-                        .opacity(amount.isEmpty ? 0 : 1)
-                   
+                    
+                    //Erase Number Button
+                    Group{
+                        Circle()
+                            .frame(width: 30)
+                            .foregroundColor(.gray)
+                            .opacity(0.3)
+                            .overlay(
+                                Image(systemName: "delete.left.fill")
+                                    .opacity(0.5)
+                                    .font(.body)
+                            )
+                            .onTapGesture {
+                                amount = String(amount.dropLast())
+                            }
+                            .opacity(amount.isEmpty ? 0 : 1)
+                    }
+                    .accessibilityLabel("Erase Number")
+                    .accessibility(addTraits: [.isButton])
+                    .accessibility(removeTraits: .isImage)
+                    
+                    
                 }.padding(10)
                 
                 Spacer()
@@ -126,6 +136,7 @@ struct AddEntryView: View {
                             .padding(.trailing, 1)
                             .padding(.leading, 6)
                             .foregroundColor(.gray)
+                            .accessibilityHidden(true)
                         
                         DatePicker(
                             "Entry Date",
@@ -145,28 +156,34 @@ struct AddEntryView: View {
                     )
                     
                     //Category
-                    HStack{
-                        Text("\(selectedCategory)")
-                            .bold()
-                            .foregroundColor(categoryColor)
+                    Group{
+                        HStack{
+                            Text("\(selectedCategory)")
+                                .bold()
+                                .foregroundColor(categoryColor)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: 43)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(categoryColor.opacity(0.1))
+                                .stroke(categoryColor.opacity(0.5), lineWidth: 1.5)
+                        )
+                        .overlay(GeometryReader { proxy in
+                            Color.clear.preference(key: AnchorPreferenceKey.self, value: proxy.frame(in: .global))
+                        })
+                        .onTapGesture {
+                            showPicker.toggle()
+                        }
+                        .onPreferenceChange(AnchorPreferenceKey.self) { preferences in
+                            // Store the position in a state variable
+                            self.categoryButtonFrame = preferences
+                        }
                     }
-                    .frame(maxWidth: .infinity, maxHeight: 43)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(categoryColor.opacity(0.1))
-                            .stroke(categoryColor.opacity(0.5), lineWidth: 1.5)
-                    )
-                    .overlay(GeometryReader { proxy in
-                        Color.clear.preference(key: AnchorPreferenceKey.self, value: proxy.frame(in: .global))
-                    })
-                    .onTapGesture {
-                        showPicker.toggle()
-                    }
-                    .onPreferenceChange(AnchorPreferenceKey.self) { preferences in
-                        // Store the position in a state variable
-                        self.categoryButtonFrame = preferences
-                    }
-                }.padding(.horizontal, 8)
+                    .accessibilityLabel("Category")
+                    .accessibility(addTraits: [.isButton])
+                    .padding(.horizontal, 8)
+                }
+
                 
                 
                 //Custom Keyboard
@@ -297,6 +314,8 @@ struct AddEntryView: View {
                         }, perform: {})
                         .padding(.top, 5)
                         .padding(.horizontal, 2.5)
+                        //Accesibility
+                        .accessibilityLabel("Add Entry")
                     }
                 }
             }
@@ -342,6 +361,7 @@ struct CategoryPickerView: View {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .stroke(Color.gray.opacity(0.5), lineWidth: 1.5)
                 )
+                .accessibilityLabel(entryTypeSegmentation == "Income" ? "Allowance" : "Rent")
                 
                 Button(entryTypeSegmentation == "Income" ? "✳️ Freelance" : "🛒 Groceries") {
                     selectCategory(entryTypeSegmentation == "Income" ? "✳️ Freelance" : "🛒 Groceries")
@@ -352,6 +372,7 @@ struct CategoryPickerView: View {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .stroke(Color.gray.opacity(0.5), lineWidth: 1.5)
                 )
+                .accessibilityLabel(entryTypeSegmentation == "Income" ? "Freelance" : "Groceries")
                 
                 Button(entryTypeSegmentation == "Income" ? "💰 Paycheck" : "🚌 Transport") {
                     selectCategory(entryTypeSegmentation == "Income" ? "💰 Paycheck" : "🚌 Transport")
@@ -362,6 +383,7 @@ struct CategoryPickerView: View {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .stroke(Color.gray.opacity(0.5), lineWidth: 1.5)
                 )
+                .accessibilityLabel(entryTypeSegmentation == "Income" ? "Paycheck" : "Transport")
                 
                 Button("📝 Other") {
                     selectCategory("📝 Other")
@@ -372,6 +394,7 @@ struct CategoryPickerView: View {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .stroke(Color.gray.opacity(0.5), lineWidth: 1.5)
                 )
+                .accessibilityLabel("Other")
             }
         }
     }
