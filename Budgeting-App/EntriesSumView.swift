@@ -15,13 +15,29 @@ struct EntriesSumView: View {
 
     @State private var totalSum : Float = 0
     
-    private var calculatedSum: Float {
-            var total: Float = 0.0
-            for entry in entries {
-                total += entry.amount
-            }
-            return total
+    @State private var calculatedSum: Float = 0
+    
+    func updateSum() {
+        var total: Float = 0.0
+        for entry in entries {
+            total += entry.amount
         }
+        withAnimation {
+            calculatedSum = total
+
+        }
+    }
+    
+    
+    var currencyFormater: NumberFormatter = {
+        var formatter = NumberFormatter()
+        
+        formatter.numberStyle = .currency
+        formatter.currencySymbol = "$"
+        
+        return formatter
+    }()
+    
     
     var body: some View {
         
@@ -38,6 +54,12 @@ struct EntriesSumView: View {
                 .font(.system(size: 60))
                 .accessibilityLabel(String(format: "%.2f", calculatedSum).prefix(7)+" dollars.")
 
+        }
+        .onAppear(){
+            updateSum()
+        }
+        .onChange(of: entries){
+            updateSum()
         }
         
         
@@ -71,10 +93,12 @@ struct EntriesSumView: View {
             endDate = calendar.date(byAdding: .month, value: 1, to: startDate)!
         }
         
-        _entries = Query(filter: #Predicate {
+        _entries = Query(
+            filter: #Predicate {
             $0.date >= startDate && $0.date < endDate
-        },
-                         sort: [sort])
+            }, 
+            sort: [sort]
+        )
     }
     
     

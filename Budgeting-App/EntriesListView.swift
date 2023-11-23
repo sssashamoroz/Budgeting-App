@@ -28,114 +28,126 @@ struct EntriesListView: View {
     //Dynamic menu text
     private var menuTitle: String {
         switch sortOrder {
-            case 1: return "today"
-            case 2: return "this week"
-            case 3: return "this month"
-            case 4: return "this year"
-            default: return "this month"
+        case 1: return "today"
+        case 2: return "this week"
+        case 3: return "this month"
+        case 4: return "this year"
+        default: return "this month"
         }
         
     }
     
     
     var body: some View {
-        VStack{
+        
+        List {
             Spacer()
-                .frame(height: 50)
             
-            VStack(spacing: 2){
-                HStack{
-                    Text("Net total")
-                        .bold()
-                    
-                    //Sort the results accodring to the order.
-                    Menu(menuTitle){
-                        Picker("Sort", selection: $sortOrder){
-                            Text("today")
-                                .tag(1)
-                            
-                            Text("this week")
-                                .tag(2)
-                            
-                            Text("this month")
-                                .tag(3)
-                            
-                            Text("this year")
-                                .tag(4)
+            HStack {
+                Spacer()
+                VStack(alignment: .center, spacing: 2){
+                    HStack{
+                        Text("Net total")
+                            .bold()
+                        
+                        //Sort the results accodring to the order.
+                        Menu(menuTitle){
+                            Picker("Sort", selection: $sortOrder){
+                                Text("today")
+                                    .tag(1)
+                                
+                                Text("this week")
+                                    .tag(2)
+                                
+                                Text("this month")
+                                    .tag(3)
+                                
+                                Text("this year")
+                                    .tag(4)
+                            }
                         }
+                        .bold()
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 2)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(.gray.opacity(0.7), lineWidth: 2)
+                        )
+                        .accessibilityHint("You can select net total range dates if you press the button.")
                     }
-                    .bold()
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 2)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(.gray.opacity(0.7), lineWidth: 2)
-                    )
-                    .accessibilityHint("You can select net total range dates if you press the button.")
+                    
+                    //Pushing down the Entries Sum view for filter selection
+                    EntriesSumView(sort: SortDescriptor(\Entry.date), range : menuTitle)
+                    
                 }
-                
-                //Pushing down the Entries Sum view for filter selection
-                EntriesSumView(sort: SortDescriptor(\Entry.date), range : menuTitle)
-                
+                Spacer()
             }
             
-            List {
-                ForEach(groupedByDayEntries.keys.sorted().reversed(), id: \.self) { key in
+            ForEach(groupedByDayEntries.keys.sorted().reversed(), id: \.self) { key in
+                
+                let values = groupedByDayEntries[key] ?? []
+                
+                Section(header : Text(key.formatted(date: .abbreviated, time: .omitted))) {
                     
-                    let values = groupedByDayEntries[key] ?? []
-                    
-                    Section(header : Text(key.formatted(date: .abbreviated, time: .omitted))) {
-                        
-                        ForEach(values.reversed()) { entry in
-                            VStack(alignment: .leading){
-                                HStack{
+                    ForEach(values.reversed()) { entry in
+                        VStack(alignment: .leading){
+                            HStack{
+                                
+                                ZStack{
                                     
-                                    ZStack{
-                                        
-                                        let rectangleColor = categoryColor(entry: entry)
-                                        
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .frame(width: 40, height: 40)
-                                            .foregroundColor(rectangleColor)
-                                        
-                                        Text(categoryEmoji(entry: entry))
-                                    }
-                                    .accessibilityHidden(true)
+                                    let rectangleColor = categoryColor(entry: entry)
                                     
-                                    VStack(alignment: .leading){
-                                        Text(entry.category)
-                                            .bold()
-                                        Text(entry.date.formatted(.dateTime.hour().minute()))
-                                            .font(.footnote)
-                                            .foregroundStyle(Color.gray)
-                                    }
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .frame(width: 40, height: 40)
+                                        .foregroundColor(rectangleColor)
                                     
-                                    
-                                    Spacer()
-                                    
-                                    Text(String(entry.amount) + "$")
-                                        .font(.system(size: 20))
-                                    
+                                    Text(categoryEmoji(entry: entry))
                                 }
+                                .accessibilityHidden(true)
+                                
+                                VStack(alignment: .leading){
+                                    Text(entry.category)
+                                        .bold()
+                                    Text(entry.date.formatted(.dateTime.hour().minute()))
+                                        .font(.footnote)
+                                    
+                                        .foregroundStyle(Color.gray)
+                                }
+                                
+                                
+                                Spacer()
+                                
+                                Text(String(entry.amount) + "$")
+                                    .font(.system(size: 20))
+                                
                             }
-                        }.onDelete(perform: deleteEntry)
-                    }
-                    
+                        }
+                    }.onDelete { self.deleteEntry(at: $0, in: key)}
+                    //.onDelete(perform: deleteEntry)
                 }
-                .listRowSeparator(.hidden)
+                
+            }
+            .listRowSeparator(.hidden)
             
         }
-            .listStyle(.plain)
-            .scrollIndicators(.hidden)
-
+        .listStyle(.plain)
+        .scrollIndicators(.hidden)
+        
+        
     }
-}
-
-//Delete Entry Function
-func deleteEntry(_ indexSet: IndexSet){
-    for index in indexSet {
-        let entry = entries[index]
-        modelContext.delete(entry)
+    
+    //Delete Entry Function
+    func deleteEntry(at indexSet : IndexSet, in key : Date){
+        guard let locatedElements = groupedByDayEntries[key] else { return }
+        
+        for index in indexSet {
+            let entryToDelete = locatedElements[index]
+            if let indexInEntries = entries.firstIndex(where: { $0.id == entryToDelete.id }) {
+                let entry = entries[indexInEntries]
+                modelContext.delete(entry)
+            }
+        }
+        
     }
 }
 
@@ -194,8 +206,8 @@ func categoryEmoji(entry: Entry) -> String {
     } else {
         return "✏️"
     }
-    }
 }
+
 
 
 #Preview {
